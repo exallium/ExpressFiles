@@ -15,12 +15,15 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 public class ExpressFilesActivity extends Activity {
+	
+	private static String TAG = "ExpressFilesActivity";
 	
 	private ListView listResults;
 	private FileAdapter fileAdapter;
@@ -60,10 +63,17 @@ public class ExpressFilesActivity extends Activity {
 					workingPath = workingDirectory.getAbsolutePath();
 					displayList();
 				} else {
+					// XXX: This needs to be able to map MIME to file type
 					Uri uri = Uri.fromFile(item);
+					
+					Log.d(TAG, item.getName());
+					
+					String [] item_split = item.getName().split("[.]");
+					String type = item_split[item_split.length - 1];
+					
 					Intent intent = new Intent();
 					intent.setAction(Intent.ACTION_VIEW);
-					intent.setDataAndType(uri, "image/*");
+					intent.setDataAndType(uri, Constants.mimemap.get(type));
 					startActivity(intent);
 				}
 			}
