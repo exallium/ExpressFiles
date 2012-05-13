@@ -53,6 +53,7 @@ public class ExpressFilesActivity extends Activity {
 	private String defaultPath;
 	private File workingDirectory;
 	private List<File> workingListing;
+	private List<File> originalList;
 	
     /** Called when the activity is first created. */
     @Override
@@ -242,6 +243,9 @@ public class ExpressFilesActivity extends Activity {
         } else {
         	this.getActionBar().setDisplayHomeAsUpEnabled(false);
         }
+        
+        originalList = new ArrayList<File>();
+        originalList.addAll(workingListing);
     }
     
     /**
