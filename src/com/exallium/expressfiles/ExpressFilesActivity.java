@@ -52,7 +52,15 @@ public class ExpressFilesActivity extends Activity {
     	switch (item.getItemId()) {
     	case android.R.id.home:
     		
-            fileList.goBack();
+    		if (!fileList.isAdded()) {
+    			trans.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+        		trans.attach(search);
+        		trans.replace(R.id.main_viewgroup, fileList, "list_fragment");
+        		trans.commit();
+    		} else {
+    			fileList.goBack();
+    		}
+    		
     		return true;
     		
     	case R.id.default_path:
