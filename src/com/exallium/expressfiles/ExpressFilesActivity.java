@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
@@ -31,6 +32,7 @@ public class ExpressFilesActivity extends Activity {
 	
 	private ListView listResults;
 	private ViewSwitcher viewSwitcher;
+	private TextView noitems;
 	private FileAdapter fileAdapter;
 	private String workingPath;
 	private File workingDirectory;
@@ -44,6 +46,7 @@ public class ExpressFilesActivity extends Activity {
         
         listResults = (ListView) findViewById(R.id.list_results);
         viewSwitcher = (ViewSwitcher) findViewById(R.id.list_switch);
+        noitems = (TextView) findViewById(R.id.list_noitems);
         
         // Get the default path we want, and open it.
         SharedPreferences prefs = getSharedPreferences("expressfile", Context.MODE_PRIVATE);
@@ -118,7 +121,9 @@ public class ExpressFilesActivity extends Activity {
     	// XXX: We are assuming the workingPath file exists.  This could lead to crashing.
         boolean filesExist = genWorkingListing();
         
-        if (!filesExist) {
+        if (!filesExist || workingListing.size() == 0) {
+        	int msg_id = !filesExist ? R.string.list_cannotaccess : R.string.list_noitems;
+        	noitems.setText(msg_id);
         	viewSwitcher.setDisplayedChild(CHILD_TEXT);
         } else {
         	viewSwitcher.setDisplayedChild(CHILD_LIST);
@@ -162,6 +167,7 @@ public class ExpressFilesActivity extends Activity {
     		return false;
     	}
     	
+    	Log.d(TAG, "fileList " + fileList.length);
     	for (File f : fileList) {
     		// XXX: this is where our regex filter should be placed.
     		workingListing.add(f);

@@ -13,6 +13,7 @@
     <TextView 
         android:layout_height="fill_parent"
         android:layout_width="fill_parent"
+        android:id="@+id/list_noitems"
         android:textAppearance="@android:style/TextAppearance.Medium"
         android:paddingTop="8dip"
         android:gravity="center_horizontal"
