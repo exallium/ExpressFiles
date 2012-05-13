@@ -5,14 +5,21 @@
         android:id="@+id/search_dir"
         android:icon="@android:drawable/ic_menu_search"
         android:showAsAction="always"
-        android:title="@string/title_search"
+        android:title="@string/menu_search"
     />
     
 	<item 
 		android:id="@+id/default_path"
 		android:icon="@android:drawable/ic_menu_revert"
 		android:showAsAction="never"
-		android:title="@string/title_default"
+		android:title="@string/menu_default"
+	/>
+	
+	<item
+	    android:id="@+id/settings"
+	    android:icon="@android:drawable/ic_menu_preferences"
+	    android:showAsAction="never"
+	    android:title="@string/menu_settings"
 	/>
 	
 </menu>

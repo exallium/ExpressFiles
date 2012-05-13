@@ -10,6 +10,7 @@ import com.exallium.expressfiles.adapters.FileAdapter;
 import com.exallium.expressfiles.listeners.SearchAnimationListener;
 
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -208,6 +209,15 @@ public class ExpressFilesActivity extends Activity {
     		Animation a = AnimationUtils.loadAnimation(getApplicationContext(), anim);
     		a.setAnimationListener(new SearchAnimationListener(searchBox));
     		searchBox.startAnimation(a);
+    		
+    		return true;
+    		
+    	case R.id.settings:
+    		
+    		// Load fragment
+    		ExpressFilesPreferenceFragment efpFrag = new ExpressFilesPreferenceFragment();
+    		FragmentTransaction trans = getFragmentManager().beginTransaction();
+    		
     		
     		return true;
     	default:
