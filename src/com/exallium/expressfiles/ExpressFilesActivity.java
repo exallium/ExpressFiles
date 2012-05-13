@@ -149,9 +149,25 @@ public class ExpressFilesActivity extends Activity {
     	
     	Log.d(TAG, "ATTEMPTING FILTER");
     	String to_match = Pattern.quote(searchBox.getText().toString());
+    	to_match = ".*" + to_match + ".*";
     	
+    	fileAdapter.clear();
+    	Log.d(TAG, "" + originalList.size());
     	
+    	for (int i = 0; i < originalList.size(); i++) {
+    		if (Pattern.matches(to_match, originalList.get(i).getName())) {
+    			Log.d(TAG, originalList.get(i).getName() + " matches");
+    			workingListing.add(originalList.get(i));
+    		}
+    	}
     	
+    	try {
+			alphabeticSort();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	
+    	fileAdapter.notifyDataSetChanged();
     }
     
     @Override
