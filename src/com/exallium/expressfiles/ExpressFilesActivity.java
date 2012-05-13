@@ -35,6 +35,7 @@ public class ExpressFilesActivity extends Activity {
 	private TextView noitems;
 	private FileAdapter fileAdapter;
 	private String workingPath;
+	private String defaultPath;
 	private File workingDirectory;
 	private List<File> workingListing;
 	
@@ -50,12 +51,21 @@ public class ExpressFilesActivity extends Activity {
         
         // Get the default path we want, and open it.
         SharedPreferences prefs = getSharedPreferences("expressfile", Context.MODE_PRIVATE);
-        workingPath = prefs.getString("default_path", null);
+        workingPath = prefs.getString("current_path", null);
+        defaultPath = prefs.getString("default_path", null);
+        
         if (workingPath == null) {
         	workingDirectory = Environment.getExternalStorageDirectory();
         	workingPath = workingDirectory.getAbsolutePath();
         } else {
         	workingDirectory = new File(workingPath);
+        }
+        
+        if (defaultPath == null) {
+        	defaultPath = workingPath;
+        	SharedPreferences.Editor edit = prefs.edit();
+        	edit.putString("default_path", defaultPath);
+        	edit.commit();
         }
         
         displayList();
@@ -93,6 +103,13 @@ public class ExpressFilesActivity extends Activity {
 		});
     }
     
+    private void writeWorkingPath() {
+    	SharedPreferences prefs = this.getSharedPreferences("expressfile", Context.MODE_PRIVATE);
+    	SharedPreferences.Editor edit = prefs.edit();
+    	edit.putString("current_path", workingPath);
+    	edit.commit();
+    }
+    
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
     	
@@ -128,6 +145,8 @@ public class ExpressFilesActivity extends Activity {
         } else {
         	viewSwitcher.setDisplayedChild(CHILD_LIST);
         }
+        
+        writeWorkingPath();
         
         // We try to sort the list
         // XXX: We need to gracefully handle the error
