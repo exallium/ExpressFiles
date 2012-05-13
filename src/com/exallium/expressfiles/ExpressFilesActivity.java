@@ -70,7 +70,6 @@ public class ExpressFilesActivity extends Activity {
 					workingPath = workingDirectory.getAbsolutePath();
 					displayList();
 				} else {
-					// XXX: This needs to be able to map MIME to file type
 					Uri uri = Uri.fromFile(item);
 					
 					Log.d(TAG, item.getName());
