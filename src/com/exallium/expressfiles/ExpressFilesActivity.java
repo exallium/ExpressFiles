@@ -2,19 +2,28 @@ package com.exallium.expressfiles;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.exallium.expressfiles.adapters.FileAdapter;
+
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 public class ExpressFilesActivity extends Activity {
 	
 	private ListView listResults;
+	private FileAdapter fileAdapter;
 	private String workingPath;
 	private File workingDirectory;
 	private List<File> workingListing;
@@ -37,7 +46,32 @@ public class ExpressFilesActivity extends Activity {
         	workingDirectory = new File(workingPath);
         }
         
-        // XXX: We are assuming the workingPath file exists.  This could lead to crashing.
+        displayList();
+        
+        listResults.setOnItemClickListener(new OnItemClickListener() {
+
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				
+				File item = workingListing.get(arg2);
+				
+				if(item.isDirectory()) {
+					workingDirectory = item;
+					workingPath = workingDirectory.getAbsolutePath();
+					displayList();
+				} else {
+					Uri uri = Uri.fromFile(item);
+					Intent intent = new Intent();
+					intent.setAction(Intent.ACTION_VIEW);
+					intent.setDataAndType(uri, "image/*");
+					startActivity(intent);
+				}
+			}
+		});
+    }
+    
+    private void displayList() {
+    	// XXX: We are assuming the workingPath file exists.  This could lead to crashing.
         genWorkingListing();
         
         // We try to sort the list
@@ -49,7 +83,11 @@ public class ExpressFilesActivity extends Activity {
 			e.printStackTrace();
 		}
         
+        fileAdapter = new FileAdapter(
+        		this.getApplicationContext(), R.layout.fileitem, workingListing);
+        listResults.setAdapter(fileAdapter);
         
+        this.getActionBar().setTitle(workingPath);
     }
     
     /**

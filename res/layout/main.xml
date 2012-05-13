@@ -8,6 +8,8 @@
         android:id="@+id/list_results"
     	android:layout_width="fill_parent"
     	android:layout_height="fill_parent"    
+    	android:layout_marginLeft="16dp"
+    	android:layout_marginRight="16dp"
     />
 
 </LinearLayout>
