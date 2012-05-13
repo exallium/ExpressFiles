@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.exallium.expressfiles.adapters.FileAdapter;
+import com.exallium.expressfiles.listeners.SearchAnimationListener;
 
 import android.app.Activity;
 import android.content.Context;
@@ -15,10 +16,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +39,7 @@ public class ExpressFilesActivity extends Activity {
 	private ListView listResults;
 	private ViewSwitcher viewSwitcher;
 	private TextView noitems;
+	private EditText searchBox;
 	private FileAdapter fileAdapter;
 	private String workingPath;
 	private String defaultPath;
@@ -48,6 +55,7 @@ public class ExpressFilesActivity extends Activity {
         listResults = (ListView) findViewById(R.id.list_results);
         viewSwitcher = (ViewSwitcher) findViewById(R.id.list_switch);
         noitems = (TextView) findViewById(R.id.list_noitems);
+        searchBox = (EditText) findViewById(R.id.search_box);
         
         // Get the default path we want, and open it.
         SharedPreferences prefs = getSharedPreferences("expressfile", Context.MODE_PRIVATE);
@@ -68,6 +76,7 @@ public class ExpressFilesActivity extends Activity {
         	edit.commit();
         }
         
+        // List stuff
         displayList();
         
         listResults.setOnItemClickListener(new OnItemClickListener() {
@@ -103,6 +112,14 @@ public class ExpressFilesActivity extends Activity {
 		});
     }
     
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater mi = this.getMenuInflater();
+        mi.inflate(R.menu.menu, menu);
+        return true;
+        
+    }
+    
     private void writeWorkingPath() {
     	SharedPreferences prefs = this.getSharedPreferences("expressfile", Context.MODE_PRIVATE);
     	SharedPreferences.Editor edit = prefs.edit();
@@ -121,6 +138,22 @@ public class ExpressFilesActivity extends Activity {
     			workingPath = workingDirectory.getAbsolutePath();
     			displayList();
     		}
+    		
+    		return true;
+    	case R.id.default_path:
+    		
+    		workingPath = defaultPath;
+    		workingDirectory = new File(defaultPath);
+    		displayList();
+    		
+    		return true;
+    		
+    	case R.id.search_dir:
+    		
+    		int anim = searchBox.isShown() ? android.R.anim.fade_out : android.R.anim.fade_in;
+    		Animation a = AnimationUtils.loadAnimation(getApplicationContext(), anim);
+    		a.setAnimationListener(new SearchAnimationListener(searchBox));
+    		searchBox.startAnimation(a);
     		
     		return true;
     	default:

@@ -5,5 +5,8 @@
     <string name="app_name">ExpressFiles</string>
     <string name="list_noitems">No files to display.</string>
     <string name="list_cannotaccess">Cannot Access File Contents</string>
+    <string name="title_default">Go to default folder</string>
+    <string name="title_search">Toggle Search</string>
+    <string name="search_hint">Enter Search Term</string>
 
 </resources>
