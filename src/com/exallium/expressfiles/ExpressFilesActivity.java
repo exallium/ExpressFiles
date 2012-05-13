@@ -2,7 +2,6 @@ package com.exallium.expressfiles;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -120,9 +119,9 @@ public class ExpressFilesActivity extends Activity {
         boolean filesExist = genWorkingListing();
         
         if (!filesExist) {
-        	viewSwitcher.setDisplayedChild(1);
+        	viewSwitcher.setDisplayedChild(CHILD_TEXT);
         } else {
-        	viewSwitcher.setDisplayedChild(0);
+        	viewSwitcher.setDisplayedChild(CHILD_LIST);
         }
         
         // We try to sort the list
