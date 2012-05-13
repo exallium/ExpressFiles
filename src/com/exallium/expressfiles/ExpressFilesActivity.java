@@ -16,16 +16,22 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.Toast;
+import android.widget.ViewSwitcher;
 
 public class ExpressFilesActivity extends Activity {
 	
 	private static String TAG = "ExpressFilesActivity";
+	private static int CHILD_LIST = 0;
+	private static int CHILD_TEXT = 1;
 	
 	private ListView listResults;
+	private ViewSwitcher viewSwitcher;
 	private FileAdapter fileAdapter;
 	private String workingPath;
 	private File workingDirectory;
@@ -38,6 +44,7 @@ public class ExpressFilesActivity extends Activity {
         setContentView(R.layout.main);
         
         listResults = (ListView) findViewById(R.id.list_results);
+        viewSwitcher = (ViewSwitcher) findViewById(R.id.list_switch);
         
         // Get the default path we want, and open it.
         SharedPreferences prefs = getSharedPreferences("expressfile", Context.MODE_PRIVATE);
@@ -68,21 +75,56 @@ public class ExpressFilesActivity extends Activity {
 					
 					Log.d(TAG, item.getName());
 					
-					String [] item_split = item.getName().split("[.]");
-					String type = item_split[item_split.length - 1];
+					String type = getFileType(item);
 					
-					Intent intent = new Intent();
-					intent.setAction(Intent.ACTION_VIEW);
-					intent.setDataAndType(uri, Constants.mimemap.get(type));
-					startActivity(intent);
+					try {
+						Intent intent = new Intent();
+						intent.setAction(Intent.ACTION_VIEW);
+						intent.setDataAndType(uri, Constants.mimemap.get(type));
+						startActivity(intent);
+					} catch (Exception e) {
+						Toast.makeText(
+								getApplicationContext(), "Could not open " + item.getName(), 
+								Toast.LENGTH_SHORT).show();
+					}
 				}
 			}
 		});
     }
     
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	
+    	switch (item.getItemId()) {
+    	case android.R.id.home:
+    		
+    		if (workingDirectory.getParentFile() != null) {
+        		workingDirectory = workingDirectory.getParentFile();
+    			workingPath = workingDirectory.getAbsolutePath();
+    			displayList();
+    		}
+    		
+    		return true;
+    	default:
+    		return false;
+    	}
+    	
+    }
+    
+    private String getFileType(File item) {
+    	String [] item_split = item.getName().split("[.]");
+		return item_split[item_split.length - 1];
+    }
+    
     private void displayList() {
     	// XXX: We are assuming the workingPath file exists.  This could lead to crashing.
-        genWorkingListing();
+        boolean filesExist = genWorkingListing();
+        
+        if (!filesExist) {
+        	viewSwitcher.setDisplayedChild(1);
+        } else {
+        	viewSwitcher.setDisplayedChild(0);
+        }
         
         // We try to sort the list
         // XXX: We need to gracefully handle the error
@@ -98,6 +140,12 @@ public class ExpressFilesActivity extends Activity {
         listResults.setAdapter(fileAdapter);
         
         this.getActionBar().setTitle(workingPath);
+        
+        if (workingDirectory.getParentFile() != null) {
+        	this.getActionBar().setDisplayHomeAsUpEnabled(true);
+        } else {
+        	this.getActionBar().setDisplayHomeAsUpEnabled(false);
+        }
     }
     
     /**
@@ -110,7 +158,13 @@ public class ExpressFilesActivity extends Activity {
     	if (!workingDirectory.isDirectory()) { return false; }
     	
     	workingListing = new ArrayList<File>();
-    	for (File f : workingDirectory.listFiles()) {
+    	
+    	File [] fileList = workingDirectory.listFiles();
+    	if (fileList == null) {
+    		return false;
+    	}
+    	
+    	for (File f : fileList) {
     		// XXX: this is where our regex filter should be placed.
     		workingListing.add(f);
     	}

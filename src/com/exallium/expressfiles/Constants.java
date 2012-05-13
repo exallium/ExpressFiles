@@ -14,6 +14,9 @@ public class Constants {
 		mimemap.put("gif", "image/*");
 		
 		// Video
+		
 		// Music
+		mimemap.put("mp3", "audio/*");
+		mimemap.put("m4a", "audio/*");
 	}
 }

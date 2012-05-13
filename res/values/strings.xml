@@ -3,5 +3,6 @@
 
     <string name="hello">Hello World, ExpressFilesActivity!</string>
     <string name="app_name">ExpressFiles</string>
+    <string name="list_noitems">No files to display.</string>
 
 </resources>
