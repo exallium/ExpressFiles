@@ -35,6 +35,7 @@ public class SearchFragment extends Fragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		
+		
 		searchBox = (EditText) this.getView();
 		
 		// Search Listener
@@ -66,7 +67,10 @@ public class SearchFragment extends Fragment {
 	public void plainTextFilter() {
     	
 		// Grab the details from the activity
-		ListFragment list = (ListFragment) getActivity().getFragmentManager().findFragmentById(R.id.list_fragment);
+		ListFragment list = (ListFragment) getActivity().getFragmentManager().findFragmentByTag("list_fragment");
+		
+		if (list == null) return;
+		
 		FileAdapter fileAdapter = list.getFileAdapter();
 		List<File>	originalList = list.getOriginalList();
 		List<File> workingListing = list.getWorkingList();

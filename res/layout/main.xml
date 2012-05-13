@@ -3,14 +3,7 @@
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
 	android:orientation="vertical"
+	android:id="@+id/main_viewgroup"
 >
-	<fragment android:name="com.exallium.expressfiles.fragments.SearchFragment"
-	    android:id="@+id/search_fragment"
-	    android:layout_width="fill_parent"
-	    android:layout_height="48dip" />
-	<fragment android:name="com.exallium.expressfiles.fragments.ListFragment"
-	    android:id="@+id/list_fragment"
-	    android:layout_weight="1"
-	    android:layout_width="fill_parent"
-	    android:layout_height="0dip" />
+
 </LinearLayout>

@@ -10,6 +10,7 @@ import com.exallium.expressfiles.R;
 import com.exallium.expressfiles.adapters.FileAdapter;
 import com.exallium.expressfiles.utils.Utilities;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -43,10 +44,15 @@ public class ListFragment extends Fragment {
 	private List<File> originalList;
 	private String workingPath;
 	private String defaultPath;
+	private boolean def = false;
 	
 	public FileAdapter getFileAdapter() { return fileAdapter; }
 	public List<File> getWorkingList() { return workingListing; }
 	public List<File> getOriginalList() { return originalList; }
+	
+	public void setDef(boolean def) {
+		this.def = def;
+	}
 	
 	public void goBack() {
 		if (workingDirectory.getParentFile() != null) {
@@ -66,6 +72,7 @@ public class ListFragment extends Fragment {
 		
 		 // Get the default path we want, and open it.
 		Log.d(TAG, "Gen working dir");
+		
         SharedPreferences prefs = getActivity().getSharedPreferences("expressfile", Context.MODE_PRIVATE);
         workingPath = prefs.getString("current_path", null);
         defaultPath = prefs.getString("default_path", null);
@@ -85,6 +92,15 @@ public class ListFragment extends Fragment {
         	edit.commit();
         }
 	}
+	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		if (def) {
+			goDefault();
+			def = false;
+		}
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -95,7 +111,9 @@ public class ListFragment extends Fragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		
+
+        setWorkingInformation();
+        
 		listResults = (ListView) getView().findViewById(R.id.list_results);
         viewSwitcher = (ViewSwitcher) getView();
         noitems = (TextView) getView().findViewById(R.id.list_noitems);
