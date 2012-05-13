@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import com.exallium.expressfiles.adapters.FileAdapter;
 import com.exallium.expressfiles.listeners.SearchAnimationListener;
@@ -15,11 +16,17 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.PatternMatcher;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.widget.Filter;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnKeyListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
@@ -40,6 +47,7 @@ public class ExpressFilesActivity extends Activity {
 	private ViewSwitcher viewSwitcher;
 	private TextView noitems;
 	private EditText searchBox;
+	private TextWatcher textWatcher;
 	private FileAdapter fileAdapter;
 	private String workingPath;
 	private String defaultPath;
@@ -76,6 +84,30 @@ public class ExpressFilesActivity extends Activity {
         	edit.commit();
         }
         
+        // Search Listener
+        textWatcher = new TextWatcher() {
+
+			public void afterTextChanged(Editable s) {
+				
+			}
+
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				
+				
+			}
+
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				
+				Log.d(TAG, "TEXT CHANGED");
+				plainTextFilter();
+			}
+        	
+        };
+        searchBox.addTextChangedListener(textWatcher);
+        
+        
         // List stuff
         displayList();
         
@@ -110,6 +142,15 @@ public class ExpressFilesActivity extends Activity {
 				}
 			}
 		});
+    }
+    
+    private void plainTextFilter() {
+    	
+    	Log.d(TAG, "ATTEMPTING FILTER");
+    	String to_match = Pattern.quote(searchBox.getText().toString());
+    	
+    	
+    	
     }
     
     @Override
