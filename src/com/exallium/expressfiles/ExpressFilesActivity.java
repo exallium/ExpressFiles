@@ -1,23 +1,28 @@
 package com.exallium.expressfiles;
 
-import com.exallium.expressfiles.fragments.ExpressFilesPreferenceFragment;
+import com.darvds.ribbonmenu.iRibbonMenuCallback;
+import com.darvds.ribbonmenu.RibbonMenuView;
 import com.exallium.expressfiles.fragments.ListFragment;
 import com.exallium.expressfiles.fragments.SearchFragment;
 
 import android.app.Activity;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ListView;
+import android.widget.TextView;
 
-public class ExpressFilesActivity extends Activity {
+public class ExpressFilesActivity extends Activity implements iRibbonMenuCallback {
 	
 	private static String TAG = "ExpressFilesActivity";
 	private SearchFragment search;
-	private ExpressFilesPreferenceFragment prefs;
 	private ListFragment fileList;
+	private RibbonMenuView ribbonMenu;
+	
 	
     /** Called when the activity is first created. */
     @Override
@@ -25,14 +30,41 @@ public class ExpressFilesActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        prefs = new ExpressFilesPreferenceFragment();
         fileList = new ListFragment();
 		search = new SearchFragment();
 		FragmentTransaction ft = getFragmentManager().beginTransaction();
-		//ft.hide(search);
 		ft.add(R.id.main_viewgroup, search);
+		ft.hide(search);
 		ft.add(R.id.main_viewgroup, fileList, "list_fragment");
 		ft.commit();
+		
+		ribbonMenu = (RibbonMenuView) findViewById(R.id.rmv);
+		ribbonMenu.setMenuClickCallback(this);
+		ribbonMenu.setMenuItems(R.menu.ribbon);
+		
+		initFilter();
+		
+    }
+    
+    private void initFilter() {
+    	SharedPreferences prefs = getSharedPreferences("expressfile", Context.MODE_PRIVATE);
+    	boolean regex = prefs.getBoolean("preference_regex", false);
+    	updateFilter(regex);
+    }
+    
+    private void updateFilter(boolean regex) {
+    	int text = regex ? R.string.preference_regex : R.string.preference_regex_off;
+    	ListView rbmListView = (ListView) ribbonMenu.findViewById(R.id.rbm_listview);
+    	// XXX: Need to do a little hacking, fork and manipulate.
+    }
+    
+    private void toggleFilter() {
+    	SharedPreferences prefs = getSharedPreferences("expressfile", Context.MODE_PRIVATE);
+    	boolean regex = prefs.getBoolean("preference_regex", false);
+    	updateFilter(!regex);
+    	SharedPreferences.Editor edit = prefs.edit();
+    	edit.putBoolean("preference_regex", !regex);
+    	edit.commit();
     }
     
     @Override
@@ -51,36 +83,14 @@ public class ExpressFilesActivity extends Activity {
     	
     	switch (item.getItemId()) {
     	case android.R.id.home:
-    		
-    		if (!fileList.isAdded()) {
-    			trans.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
-        		trans.attach(search);
-        		trans.replace(R.id.main_viewgroup, fileList, "list_fragment");
-        		trans.commit();
-    		} else {
-    			fileList.goBack();
-    		}
-    		
+    		fileList.goBack();
     		return true;
     		
     	case R.id.default_path:
-    		
-    		if (!fileList.isAdded()) {
-        		Log.d(TAG, "HERE I AM1123411");
-        		fileList.setDef(true);
-        		trans.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
-        		trans.attach(search);
-        		trans.replace(R.id.main_viewgroup, fileList, "list_fragment");
-        		trans.commit();
-    		} else {
-                fileList.goDefault();
-    		}
-    		
+            fileList.goDefault();
     		return true;
     		
     	case R.id.search_dir:
-    		
-    		if (!prefs.isHidden() && prefs.isAdded()) return false;
     		
     		// Show search fragment
     		trans.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
@@ -96,23 +106,21 @@ public class ExpressFilesActivity extends Activity {
     		return true;
     		
     	case R.id.settings:
-    		
-    		// Hotswap fragment
-    		trans.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
-    		trans.detach(search);
-    		trans.replace(R.id.main_viewgroup, prefs);
-    		trans.commit();
-    		
+    		ribbonMenu.toggleMenu();
     		return true;
     	default:
     		return false;
     	}
     	
     }
-    
-    
-    
 
-    
+	public void RibbonMenuItemClick(int itemId) {
+		switch(itemId) {
+		case R.id.ribbon_filter:
+			toggleFilter();
+		}
+		
+	}
+
     
 }
