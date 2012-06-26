@@ -9,9 +9,8 @@
     <string name="menu_search">Toggle Search</string>
     <string name="search_hint">Enter Search Term</string>
     <string name="menu_settings">Preferences</string>
-    <string name="preference_regex">Java Regex Searching</string>
-    <string name="preference_regex_on">Regular Expressions enabled</string>
-    <string name="preference_regex_off">Regular Expressions disabled</string>
+    <string name="preference_regex">Enable Regex</string>
+    <string name="preference_regex_off">Disable Regex</string>
     <string name="preference_name">Preferences</string>
 
 </resources>
