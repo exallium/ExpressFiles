@@ -1,3 +1,10 @@
+/**
+ * @package com.exallium.expressfiles.utils
+ * @file Filter.java
+ * @author Alexander Hart
+ * @date June, 2012
+ * @brief Filter for ListFragment
+ */
 package com.exallium.expressfiles.utils;
 
 import java.io.File;
