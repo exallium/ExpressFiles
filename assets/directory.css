@@ -1,0 +1,50 @@
+body {
+  background: white;
+}
+
+.icon {
+  width: 72px;
+  height: 72px;
+  
+  background: #252525;
+  margin: auto;
+  margin-top: 300px;
+}
+
+.tab {
+  background: white;
+}
+
+#tabb {
+  position: relative;
+  height: 50%;
+  width: 60%;
+  top: 15%;
+  left: 20%;
+  border-radius: 0 5 5 5;
+  border-top: 1px solid #EEE;
+  z-index: 2;
+  
+  background: -webkit-linear-gradient(top, #EEE, #FFF);
+}
+
+.top {
+  position: relative;
+  height: 15%;
+  width: 30%;
+  top: 20%;
+  left: 20%;
+  border-radius: 5 5 0 0;
+  border-right: 1px solid #DDD;
+}
+
+#tabl {
+  background: #EEE;
+  z-index: 1;
+  float: left;
+}
+
+#tabr {
+  left: 30%
+}
+

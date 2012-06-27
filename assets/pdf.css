@@ -1,0 +1,24 @@
+body {
+  background: white;
+}
+
+.icon {
+  width: 72px;
+  height: 72px;
+  
+  background: #f00;
+  margin: auto;
+  margin-top: 300px;
+}
+
+.text {
+  width:90%;
+  font-size: 2em;
+  font-family: Helvetica;
+  color: white;
+  position: relative;
+  top: 27%;
+  left: 6%;
+  text-shadow: 0 0 2px #252525;
+}
+
