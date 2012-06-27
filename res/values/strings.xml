@@ -6,7 +6,7 @@
     <string name="list_noitems">No files to display.</string>
     <string name="list_cannotaccess">Cannot Access File Contents</string>
     <string name="menu_default">Go to default folder</string>
-    <string name="menu_search">Toggle Search</string>
+    <string name="menu_search">Search this Folder</string>
     <string name="search_hint">Enter Search Term</string>
     <string name="menu_settings">Preferences</string>
     <string name="preference_regex">Enable Regex</string>
