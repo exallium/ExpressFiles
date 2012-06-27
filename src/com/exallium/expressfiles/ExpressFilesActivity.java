@@ -28,7 +28,7 @@ public class ExpressFilesActivity extends Activity {
 
         fileList = new ListFragment();
 		FragmentTransaction ft = getFragmentManager().beginTransaction();
-		ft.add(R.id.main_viewgroup, fileList, "list_fragment");
+		ft.replace(R.id.main_viewgroup, fileList, "list_fragment");
 		ft.commit();
 		
 		filter = new Filter(this);
